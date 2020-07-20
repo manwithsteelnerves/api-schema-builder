@@ -103,9 +103,10 @@ function buildResponseBodyValidation(responses, swaggerDefinitions, originalSwag
         return new Validators.SimpleValidator(ajv.compile(schema));
     }
 }
-
+let ajv;
 function buildRequestBodyValidation(schema, swaggerDefinitions, originalSwagger, currentPath, currentMethod, options) {
-    const ajv = buildAjvValidator(options.ajvConfigBody, options.formats, options.keywords);
+    if(!ajv)
+        ajv = buildAjvValidator(options.ajvConfigBody, options.formats, options.keywords);
 
     if (schema.discriminator) {
         const referenceName = originalSwagger.paths[currentPath][currentMethod].parameters.filter(function (parameter) { return parameter.in === 'body' })[0].schema.$ref;
