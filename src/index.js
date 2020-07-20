@@ -161,17 +161,20 @@ function buildResponseValidator(referenced, dereferenced, currentPath, currentMe
 
     return responsesSchema;
 }
-
+let ajv;
+let ajvOptions;
 function buildParametersValidation(parameters, contentTypes, options) {
     const defaultAjvOptions = {
         allErrors: true,
         coerceTypes: 'array'
         // unknownFormats: 'ignore'
     };
-    const ajvOptions = Object.assign({}, defaultAjvOptions, options.ajvConfigParams);
-    const ajv = new Ajv(ajvOptions);
+    if(!ajv) {
+        ajvOptions = Object.assign({}, defaultAjvOptions, options.ajvConfigParams);
+        ajv = new Ajv(ajvOptions);
 
-    ajvUtils.addCustomKeyword(ajv, options.formats, options.keywords);
+        ajvUtils.addCustomKeyword(ajv, options.formats, options.keywords);
+    }
 
     var ajvParametersSchema = {
         title: 'HTTP parameters',
